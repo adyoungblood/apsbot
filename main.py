@@ -21,7 +21,7 @@ undertale_server = None
 apsbot = None
 
 shushed = ''
-games = ('mr carrot sim 2017', 'making spaghetti', 'dunking sim 2017')
+games = ('mr carrot sim 2017', 'making spaghetti', 'dunking sim 2017', 'reading brit book')
 
 async def random_game():
 	while True:
