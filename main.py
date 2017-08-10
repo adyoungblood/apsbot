@@ -4,13 +4,13 @@
 import discord
 from discord.utils import find
 import asyncio
-import time
 from datetime import datetime
 import json
 import math
 from random import choice
 import sys
 import traceback
+import re
 
 client = discord.Client()
 
@@ -66,43 +66,54 @@ async def on_message(message):
 			if message.author == shushed:
 				await client.delete_message(message)
 			elif message.content.startswith('!shush'):
-				print('User {} used shush command.'.format(message.author))
 				try:
 					shushuser = message.content.split(' ')[1]
 				except:
 					await client.send_message(message.channel, 'That user is invalid. Try again.')
 					return
-				for member in message.server.members:
-					if shushuser in member.displayname:
-						shushuser = member.name
+				for user in message.server.members:
+					if shushuser in user.name:
+						shushuser = user.name
+				print('User {} used shush command on user {}'.format(message.author, shushuser))
 				await client.send_typing(message.channel)
 				await asyncio.sleep(1)
-				await client.send_message(message.channel, "Starting a vote to shush {}. Respond with either 'aye' or 'nae' within the next 20 seconds to cast your vote.".format(shushuser))
-				vote_start = datetime.utcnow()
-				await asyncio.sleep(5)
-				print('done sleeping')
+				await client.send_message(message.channel, "Starting a vote to shush {}. Respond with either 'aye' or 'nae' within the next 45 seconds to cast your vote.".format(shushuser))
+				await asyncio.sleep(7)
 				final_votes = {}
-				async for vote in client.logs_from(message.channel, limit=100, after=vote_start):
+				async for vote in client.logs_from(message.channel, limit=50, after=vote_start):
+					print(message.content)
 					if message.author in final_votes:
 						pass
 					else:
 						final_votes.update({message.author : check_vote(message.content)})
+						await client.send_message(message.channel, 'User {} has voted aye.'.format(message.author))
 				ayes = 0
 				for choice in final_votes:
+					print(final_votes[choice])
 					if final_votes[choice]:
 						ayes += 1
-				if ayes >= math.ceil(message.server.members / 2):
+				if ayes >= math.ceil(len(message.server.members) / 2):
 					shushed = shushuser
 					config[shushed] = shushed
 					open('config.json', 'wb').write(config)
+					await client.send_typing(message.channel)
+					await asyncio.sleep(1)
 					await client.send_message(message.channel, 'The vote has passed. The user {} has been shushed. Use !unshush (user) to undo this.')
 				else:
+					await client.send_typing(message.channel)
+					await asyncio.sleep(1)
 					await client.send_message(message.channel, 'The vote has failed.')
+				for vote in final_votes:
+					print('votes: ' + str(final_votes[vote]))
+				print('ayes: ' + str(ayes))
+				print('shushed: ' + shushed)
 			elif message.content.startswith('!unshush'):
 				print('User {} used unshush command.'.format(message.author))
-				await client.send_message(message.channel, "Starting a vote to unshush {}. Respond with either 'aye' or 'nae' within the next 20 seconds to cast your vote.".format(shushuser))
+				await client.send_typing(message.channel)
+				await asyncio.sleep(1)
+				await client.send_message(message.channel, "Starting a vote to unshush {}. Respond with either 'aye' or 'nae' within the next 45 seconds to cast your vote.".format(shushuser))
 				vote_start = datetime.utcnow()
-				await asyncio.sleep(5)
+				await asyncio.sleep(7)
 				final_votes = {}
 				async for vote in client.logs_from(message.channel, limit=100, after=vote_start):
 					if message.author in final_votes:
@@ -113,20 +124,30 @@ async def on_message(message):
 				for choice in final_votes:
 					if final_votes[choice]:
 						ayes += 1
-				if ayes >= math.ceil(message.server.members / 2):
+				if ayes >= math.ceil(len(message.server.members) / 2):
 					shushed = ''
 					config[shushed] = shushed
 					open('config.json', 'wb').write(config)
+					await client.send_typing(message.channel)
+					await asyncio.sleep(1)
 					await client.send_message(message.channel, 'The vote has passed. The user {} has been unshushed.')
 				else:
+					await client.send_typing(message.channel)
+					await asyncio.sleep(1)
 					await client.send_message(message.channel, 'The vote has failed.')
+				for vote in final_votes:
+					print('votes: ' + str(final_votes[vote]))
+				print('ayes: ' + str(ayes))
+				print('shushed: ' + shushed)
 
 
 			if '🅱' in message.content:
+				await client.send_typing(message.channel)
+				await asyncio.sleep(1)
 				await client.send_message(message.channel, 'No b emojis vegena')
-				print('Kicking: ' + undertale_server.get_member(message.author.id).name)
+				print('Kicking: ' + message.server.get_member(message.author.id).name)
 				await asyncio.sleep(3)
-				await client.kick(undertale_server.get_member(message.author.id))
+				await client.kick(message.server.get_member(message.author.id))
 
 @client.event
 async def on_error(*args):
