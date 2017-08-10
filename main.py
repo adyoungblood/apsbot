@@ -186,4 +186,4 @@ async def on_error(*args):
                             sys.exc_info()[0].__name__)
                         )
 
-client.run('MzM5NDgwNTI1OTUxNTk4NTky.DGPPvg._plVK_0NUbsdBPSy4pPdu_WxTnw')
+client.run(config[token])
