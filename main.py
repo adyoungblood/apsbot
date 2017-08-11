@@ -60,7 +60,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-	global undertale_server, apsbot,shushed
+	global undertale_server, apsbot, shushed
 	if message.author != apsbot:
 		if message.server == undertale_server:
 			if '🅱' in message.content:
@@ -70,7 +70,7 @@ async def on_message(message):
 				print('Kicking: ' + message.server.get_member(message.author.id).name)
 				await asyncio.sleep(3)
 				await client.kick(message.server.get_member(message.author.id))
-			if message.author == shushed:
+			if message.author.id == configtxt['shushed']:
 				await client.delete_message(message)
 			elif message.content.startswith('!shush'):
 				try:
@@ -79,10 +79,11 @@ async def on_message(message):
 					await client.send_message(message.channel, 'That user is invalid. Try again.')
 					return
 				shushuser = discord.utils.find(lambda m: m.name == shushuser, message.server.members)
-				print('User {} used shush command on user {}'.format(message.author, shushuser))
+				shushuser = shushuser.id
+				print('User {} used shush command on user {}'.format(message.author, message.server.get_member(shushuser)))
 				await client.send_typing(message.channel)
 				await asyncio.sleep(0.5)
-				vote_start = await client.send_message(message.channel, "Starting a vote to shush {}. Respond with either 'aye' or 'nae' within the next 30 seconds to cast your vote.".format(shushuser))
+				vote_start = await client.send_message(message.channel, "Starting a vote to shush {}. Respond with either 'aye' or 'nae' within the next 30 seconds to cast your vote.".message.server.get_member(shushuser))
 				voted = []
 				y = 0
 				await asyncio.sleep(15)
@@ -108,9 +109,8 @@ async def on_message(message):
 					#requirement = 1
 				if y >= requirement:
 					await asyncio.sleep(1)
-					await client.send_message(message.channel, 'The vote has passed. The user {} has been shushed. Use !unshush (user) to undo this.'.format(shushuser))
-					shushed = shushuser
-					configtxt['shushed'] = str(shushed)
+					await client.send_message(message.channel, 'The vote has passed. The user {} has been shushed. Use !unshush (user) to undo this.'.format(message.server.get_member(shushuser)))
+					configtxt['shushed'] = str(shushuser)
 				else:
 					await client.send_typing(message.channel)
 					await asyncio.sleep(1)
@@ -121,15 +121,15 @@ async def on_message(message):
 
 			elif message.content.startswith('!unshush'):
 				shushuser = configtxt['shushed']
-				print('User {} used unshush command on user {}'.format(message.author, shushuser))
+				print('User {} used unshush command on user {}'.format(message.author, message.server.get_member(shushuser)))
 				await client.send_typing(message.channel)
 				await asyncio.sleep(0.5)
-				vote_start = await client.send_message(message.channel, "Starting a vote to unshush {}. Respond with either 'aye' or 'nae' within the next 30 seconds to cast your vote.".format(shushuser))
+				vote_start = await client.send_message(message.channel, "Starting a vote to unshush {}. Respond with either 'aye' or 'nae' within the next 30 seconds to cast your vote.".format(message.server.get_member(shushuser)))
 				voted = []
 				y = 0
 				await asyncio.sleep(15)
 				async for vote in client.logs_from(message.channel, limit=100, after=vote_start):
-					if vote.author in voted or vote.author == shushed:
+					if vote.author in voted or vote.author.id == shushuser:
 						continue
 					else:
 						if check_vote(vote.content) is None:
@@ -150,8 +150,7 @@ async def on_message(message):
 					#requirement = 1
 				if y >= requirement:
 					await asyncio.sleep(1)
-					await client.send_message(message.channel, 'The vote has passed. The user {} has been unshushed. Use !shush (user) to redo this.'.format(shushuser))
-					shushed = ''
+					await client.send_message(message.channel, 'The vote has passed. The user {} has been unshushed. Use !shush (user) to redo this.'.format(message.server.get_member(shushuser)))
 					configtxt['shushed'] = ''
 				else:
 					await client.send_typing(message.channel)
@@ -164,9 +163,20 @@ async def on_message(message):
 				if configtxt['shushed'] == '':
 					await client.send_message(message.channel, 'No one is currently shushed.')
 				else:
-					await client.send_message(message.channel, 'The user {} is currently shushed.'.format(configtxt['shushed']))
+					await client.send_message(message.channel, 'The user {} is currently shushed.'.format(message.server.get_member(configtxt['shushed'])))
 
-			elif message.content == 'apsbot are you there':
+			elif '**' in message.content:
+				cmd = message.content.split('**')
+				cmds = cmd[1].strip('**').split(',')
+				if not cmds:
+					break
+				elif len(cmds) == 1:
+					
+				for flag in cmds:
+					if flag == 'tts':
+						await client.send_message(message.channel, message.author.name + ': ' + cmd[0], tts=True)
+
+			elif message.content.lower() == 'apsbot are you there':
 				await client.send_message(message.channel, 'Yes.')
 
 			elif message.author == message.server.get_member('283414992752082945') and message.content.startswith('!off'):
