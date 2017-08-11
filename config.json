@@ -1,10 +1,1 @@
-{
-	"invoker" : "apsbot ", 
-	"shushed" : "", 
-	"error_messages": [
-	        "Oh no!",
-	        "How'd you do that?",
-	        "Oops..."
-	    ]
-	"token" : "MzM5NDgwNTI1OTUxNTk4NTky.DG17Qw.Pd0yoKcaBJNup8PSGYAKAne9rNs"
-}
+{"token": "MzM5NDgwNTI1OTUxNTk4NTky.DG5CSQ.XJxSaABgIUHMZ5uycf47eeBUN6s", "invoker": "apsbot", "shushed": "vood#2449", "error_messages": ["Oh no!", "How'd you do that?", "Oops..."]}
