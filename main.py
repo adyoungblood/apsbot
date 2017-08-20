@@ -11,6 +11,9 @@ from random import choice
 import sys
 import traceback
 import re
+import pyenchant
+
+d = enchant.Dict("en_US")
 
 client = discord.Client()
 
@@ -75,10 +78,10 @@ async def on_message(message):
 			elif message.content.startswith('!shush'):
 				try:
 					shushuser = message.content.split(' ')[1]
+					shushuser = discord.utils.find(lambda m: m.name == shushuser, message.server.members)
 				except:
 					await client.send_message(message.channel, 'That user is invalid. Try again.')
 					return
-				shushuser = discord.utils.find(lambda m: m.name == shushuser, message.server.members)
 				shushuser = shushuser.id
 				print('User {} used shush command on user {}'.format(message.author, message.server.get_member(shushuser)))
 				await client.send_typing(message.channel)
@@ -165,22 +168,18 @@ async def on_message(message):
 				else:
 					await client.send_message(message.channel, 'The user {} is currently shushed.'.format(message.server.get_member(configtxt['shushed'])))
 
-			elif '**' in message.content:
-				cmd = message.content.split('**')
-				cmds = cmd[1].strip('**').split(',')
-				if not cmds:
-					break
-				elif len(cmds) == 1:
-					
-				for flag in cmds:
-					if flag == 'tts':
-						await client.send_message(message.channel, message.author.name + ': ' + cmd[0], tts=True)
-
 			elif message.content.lower() == 'apsbot are you there':
 				await client.send_message(message.channel, 'Yes.')
 
 			elif message.author == message.server.get_member('283414992752082945') and message.content.startswith('!off'):
 				await client.close()
+			
+			else:
+				for word in message.content:
+					if d.check(word):
+						pass
+					else:
+						await client.send_message(message.channel, 'The word {} is misspelled.'.format('word'))
 
 
 			
