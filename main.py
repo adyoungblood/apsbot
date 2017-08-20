@@ -9,6 +9,7 @@ import json
 import math
 from random import choice
 import sys
+import os
 import traceback
 import re
 import pyenchant
@@ -31,6 +32,9 @@ async def random_game():
 		game = discord.Game(name=choice(games))
 		await client.change_presence(game=game)
 		await asyncio.sleep(3600)
+		
+async def update_self():
+	os.system('gitpull.bat')
 
 def check_vote(string):
 	string = string.split()
@@ -170,6 +174,9 @@ async def on_message(message):
 
 			elif message.content.lower() == 'apsbot are you there':
 				await client.send_message(message.channel, 'Yes.')
+			
+			elif message.content.lower() == '!udpate' and message.author == message.server.get_member('283414992752082945'):
+				update_self()
 
 			elif message.author == message.server.get_member('283414992752082945') and message.content.startswith('!off'):
 				await client.close()
