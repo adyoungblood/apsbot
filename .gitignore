@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 config/config.json
+=======
+
+configs/config.json
+>>>>>>> ca33c26b9afcdcae7c300a24a2dcb82793fab2f7
 *.json
