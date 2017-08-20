@@ -78,10 +78,10 @@ async def on_message(message):
 			elif message.content.startswith('!shush'):
 				try:
 					shushuser = message.content.split(' ')[1]
+					shushuser = discord.utils.find(lambda m: m.name == shushuser, message.server.members)
 				except:
 					await client.send_message(message.channel, 'That user is invalid. Try again.')
 					return
-				shushuser = discord.utils.find(lambda m: m.name == shushuser, message.server.members)
 				shushuser = shushuser.id
 				print('User {} used shush command on user {}'.format(message.author, message.server.get_member(shushuser)))
 				await client.send_typing(message.channel)
