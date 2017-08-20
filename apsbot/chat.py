@@ -3,6 +3,15 @@ import asyncio
 import time
 
 @base.prefunc
+async def no_b(client, message):
+	if '🅱' in message.content:
+		await client.send_typing(message.channel)
+		await asyncio.sleep(1)
+		await client.send_message(message.channel, 'No b emojis vegena')
+		await asyncio.sleep(3)
+		await client.kick(message.server.get_member(message.author.id))
+
+@base.prefunc
 async def check_shush(client, message):
 	with open('config.json', 'r') as config:
 		if message.author == config['shushed']:
