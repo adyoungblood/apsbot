@@ -107,9 +107,9 @@ async def unshush(client, message):
 @base.apsfunc
 async def isshushed(client, message):
 	if configtxt['shushed'] == '':
-			await client.send_message(message.channel, 'No one is currently shushed.')
-		else:
-			await client.send_message(message.channel, 'The user {} is currently shushed.'.format(message.server.get_member(configtxt['shushed'])))
+		await client.send_message(message.channel, 'No one is currently shushed.')
+	else:
+		await client.send_message(message.channel, 'The user {} is currently shushed.'.format(message.server.get_member(configtxt['shushed'])))
 
 @base.apsfunc
 async def youthere(client, message):
