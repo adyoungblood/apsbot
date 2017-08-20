@@ -12,7 +12,7 @@ import sys
 import os
 import traceback
 import re
-import pyenchant
+import enchant
 
 d = enchant.Dict("en_US")
 
