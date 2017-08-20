@@ -10,7 +10,7 @@ from random import choice # for choosing game ids
 import discord # obvious.
 # https://github.com/Rapptz/discord.py/tree/async
 
-import cacobot # imports all plugins in the cacobot folder.
+import apsbot # imports all plugins in the apsbot folder.
 
 # A sample configs/config.json should be supplied.
 with open('configs/config.json') as data:
@@ -42,16 +42,6 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------')
-    # pylint: disable=w1401
-    # pylint was freaking out about the ascii bullshit so I had to add that.
-    print("""
-  ____                ____        _     ____                _
- / ___|__ _  ___ ___ | __ )  ___ | |_  |  _ \ ___  __ _  __| |_   _
-| |   / _` |/ __/ _ \|  _ \ / _ \| __| | |_) / _ \/ _` |/ _` | | | |
-| |__| (_| | (_| (_) | |_) | (_) | |_  |  _ <  __/ (_| | (_| | |_| |
- \____\____|\___\___/|____/ \___/ \__| |_| \_\___/\____|\____|\__  |
-                                                              |___/
-""")
     await random_game()
 
 @client.event
@@ -63,22 +53,22 @@ async def on_message(message):
     cont = True
 
     # execute Precommands
-    for func in cacobot.base.pres:
-        cont = await cacobot.base.pres[func](message, client)
+    for func in apsbot.base.pres:
+        cont = await apsbot.base.pres[func](message, client)
         if not cont:
             return
 
     if message.content.startswith(config['invoker']) and \
      message.author.id != client.user.id and \
      len(message.content) > 1:
-        command = message.content.split()[0][len(cacobot.base.config['invoker']):].lower()
+        command = message.content.split()[0][len(apsbot.base.config['invoker']):].lower()
         # So basically if the message was ".Repeat Butt talker!!!" this
         # would be "repeat"
-        if command in cacobot.base.functions:
+        if command in apsbot.base.functions:
             if message.channel.is_private or\
             message.channel.permissions_for(message.server.me).send_messages:
                 await client.send_typing(message.channel)
-                await cacobot.base.functions[command](message, client)
+                await apsbot.base.functions[command](message, client)
             else:
                 print('\n===========\nThe bot cannot send messages to #{} in the server "{}"!\n===========\n\nThis message is only showing up because I *tried* to send a message but it didn\'t go through. This probably means the mod team has tried to disable this bot, but someone is still trying to use it!\n\nHere is the command in question:\n\n{}\n\nThis was sent by {}.\n\nIf this message shows up a lot, the bot might be disabled in that server. You should just make it leave if the mod team isn\'t going to just kick it!'.format(
                     message.channel.name,
@@ -88,8 +78,8 @@ async def on_message(message):
                     )
                 ) # pylint: disable=c0330
 
-    for func in cacobot.base.posts:
-        await cacobot.base.posts[func](message, client)
+    for func in apsbot.base.posts:
+        await apsbot.base.posts[func](message, client)
 
 @client.event
 async def on_error(*args):
