@@ -32,9 +32,6 @@ async def random_game():
 		game = discord.Game(name=choice(games))
 		await client.change_presence(game=game)
 		await asyncio.sleep(3600)
-		
-async def update_self():
-	os.system('gitpull.bat')
 
 def check_vote(string):
 	string = string.split()
@@ -176,7 +173,8 @@ async def on_message(message):
 				await client.send_message(message.channel, 'Yes.')
 			
 			elif message.content.lower() == '!udpate' and message.author == message.server.get_member('283414992752082945'):
-				update_self()
+				os.system('gitpull.bat')
+				sys.exit()
 
 			elif message.author == message.server.get_member('283414992752082945') and message.content.startswith('!off'):
 				await client.close()
