@@ -179,15 +179,6 @@ async def on_message(message):
 
 			elif message.author == message.server.get_member('283414992752082945') and message.content.startswith('!off'):
 				await client.close()
-			
-			"""
-			else:
-				for word in message.content:
-					if d.check(word):
-						pass
-					else:
-						await client.send_message(message.channel, 'The word {} is misspelled.'.format('word'))
-			"""
 
 
 			
