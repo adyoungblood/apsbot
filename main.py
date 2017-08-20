@@ -12,9 +12,6 @@ import sys
 import os
 import traceback
 import re
-import enchant
-
-d = enchant.Dict("en_US")
 
 client = discord.Client()
 
@@ -25,7 +22,8 @@ undertale_server = None
 apsbot = None
 
 shushed = ''
-games = ('mr carrot sim 2017', 'making spaghetti', 'dunking sim 2017', 'reading brit book')
+games = ('mr carrot sim 2017', 'making spaghetti', 'dunking sim 2017', 'reading brit book', 'Overwatch', 'PUBG', 'Subnautica', 'Duck Game', 
+'Doot')
 
 async def random_game():
 	while True:
