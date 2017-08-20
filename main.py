@@ -172,8 +172,8 @@ async def on_message(message):
 			elif message.content.lower() == 'apsbot are you there':
 				await client.send_message(message.channel, 'Yes.')
 			
-			elif message.content.lower() == '!udpate' and message.author == message.server.get_member('283414992752082945'):
-				await client.send_message(message.channel, 'Closing to update')
+			elif message.content.lower() == '!update' and message.author == message.server.get_member('283414992752082945'):
+				print('Closing to update')
 				os.system('gitpull.bat')
 				sys.exit()
 
