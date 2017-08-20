@@ -173,7 +173,7 @@ async def on_message(message):
 				await client.send_message(message.channel, 'Yes.')
 			
 			elif message.content.lower() == '!udpate' and message.author == message.server.get_member('283414992752082945'):
-				await client.send_message(message.channel, 'Closing to update')
+				print('Closing to update')
 				os.system('gitpull.bat')
 				sys.exit()
 
