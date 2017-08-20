@@ -9,7 +9,7 @@ functions = {}
 # This decorator is placed on all functions we want to add to CacoBot. It
 # automagically makes the function's name the invoker, and adds it to the
 # functions dictionary.
-def cacofunc(func):
+def apsfunc(func):
     functions[func.__name__] = func
     return func
 
@@ -30,13 +30,13 @@ def cacofunc(func):
 
 pres = {}
 
-def precommand(func):
+def prefunc(func):
     pres[func.__name__] = func
     return func
 
 posts = {}
 
-def postcommand(func):
+def postfunc(func):
     posts[func.__name__] = func
     return func
 

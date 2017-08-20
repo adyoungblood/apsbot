@@ -2,6 +2,8 @@ import discord
 import asyncio
 import time
 
+from apsbot import base
+
 @base.prefunc
 async def no_b(client, message):
 	if '🅱' in message.content:

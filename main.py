@@ -32,7 +32,7 @@ async def random_game():
     while True:
         name = choice(config['games'])
         game = discord.Game(name=name)
-        await client.change_status(game=game)
+        await client.change_presence(game=game)
         await asyncio.sleep(3600)
 
 @client.event
