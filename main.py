@@ -1,45 +1,23 @@
-# -*- coding: utf8 -*-
+# Again, this is all from cacobot, because I'm bad. Sorry.
 
-#import apsbot
-import discord
-from discord.utils import find
-import asyncio
-from datetime import datetime
-import json
-import math
-from random import choice
-import sys
-import os
-import traceback
-import re
+# standard imports
+import sys # for tracebaks in on_error.
+import json # to load the config file.
+import traceback # also used to print tracebacks. I'm a lazy ass.
+import asyncio # because we're using the async branch of discord.py.
+from random import choice # for choosing game ids
 
-client = discord.Client()
+import discord # obvious.
+# https://github.com/Rapptz/discord.py/tree/async
 
-config = open('config.json', 'r')
-configtxt = json.load(config)
+import cacobot # imports all plugins in the cacobot folder.
 
-undertale_server = None
-apsbot = None
+# A sample configs/config.json should be supplied.
+with open('configs/config.json') as data:
+    config = json.load(data)
 
-shushed = ''
-games = ('mr carrot sim 2017', 'making spaghetti', 'dunking sim 2017', 'reading brit book', 'Overwatch', 'PUBG', 'Subnautica', 'Duck Game', 
-'Doot')
-
-async def random_game():
-	while True:
-		game = discord.Game(name=choice(games))
-		await client.change_presence(game=game)
-		await asyncio.sleep(3600)
-
-def check_vote(string):
-	string = string.split()
-	for word in string:
-		if re.fullmatch('aye*?', word):
-			return(True)
-		elif re.fullmatch('nae*?', word):
-			return(False)
-		else:
-			return(None)
+# log in
+client = discord.Client(max_messages=100)
 
 def aan(string):
     '''Returns "a" or "an" depending on a string's first letter.'''
@@ -48,142 +26,79 @@ def aan(string):
     else:
         return 'a'
 
+# random game status
+async def random_game():
+    ''' Changes the game in the bot's status. '''
+    while True:
+        name = choice(config['games'])
+        game = discord.Game(name=name)
+        await client.change_status(game=game)
+        await asyncio.sleep(3600)
+
 @client.event
 async def on_ready():
-	global undertale_server, apsbot
-	undertale_server = client.get_server(id='330801853455663107')
-	apsbot = undertale_server.get_member(client.user.id)
-	print('Logged in as')
-	print(client.user.name)
-	print(client.user.id)
-	print('--------')
-	await random_game()
-	#await client.send_message(client.get_channel('344859521157693440'), 'Ready for action!')
+    ''' Executed when the bot successfully connects to Discord. '''
+    print('Logged in as')
+    print(client.user.name)
+    print(client.user.id)
+    print('------')
+    # pylint: disable=w1401
+    # pylint was freaking out about the ascii bullshit so I had to add that.
+    print("""
+  ____                ____        _     ____                _
+ / ___|__ _  ___ ___ | __ )  ___ | |_  |  _ \ ___  __ _  __| |_   _
+| |   / _` |/ __/ _ \|  _ \ / _ \| __| | |_) / _ \/ _` |/ _` | | | |
+| |__| (_| | (_| (_) | |_) | (_) | |_  |  _ <  __/ (_| | (_| | |_| |
+ \____\____|\___\___/|____/ \___/ \__| |_| \_\___/\____|\____|\__  |
+                                                              |___/
+""")
+    await random_game()
 
 @client.event
 async def on_message(message):
-	global undertale_server, apsbot, shushed
-	if message.author != apsbot:
-		if message.server == undertale_server:
-			if '🅱' in message.content:
-				await client.send_typing(message.channel)
-				await asyncio.sleep(1)
-				await client.send_message(message.channel, 'No b emojis vegena')
-				print('Kicking: ' + message.server.get_member(message.author.id).name)
-				await asyncio.sleep(3)
-				await client.kick(message.server.get_member(message.author.id))
-			if message.author.id == configtxt['shushed']:
-				await client.delete_message(message)
-			elif message.content.startswith('!shush'):
-				try:
-					shushuser = message.content.split(' ')[1]
-					shushuser = discord.utils.find(lambda m: m.name == shushuser, message.server.members)
-				except:
-					await client.send_message(message.channel, 'That user is invalid. Try again.')
-					return
-				shushuser = shushuser.id
-				print('User {} used shush command on user {}'.format(message.author, message.server.get_member(shushuser)))
-				await client.send_typing(message.channel)
-				await asyncio.sleep(0.5)
-				vote_start = await client.send_message(message.channel, "Starting a vote to shush {}. Respond with either 'aye' or 'nae' within the next 30 seconds to cast your vote.".message.server.get_member(shushuser))
-				voted = []
-				y = 0
-				await asyncio.sleep(15)
-				async for vote in client.logs_from(message.channel, limit=100, after=vote_start):
-					if vote.author in voted or vote.author == shushed:
-						continue
-					else:
-						if check_vote(vote.content) is None:
-							continue
-						elif check_vote(vote.content):
-							y += 1
-							print('User {} voted aye.'.format(vote.author))
-							voted.append(vote.author)
-						else:
-							print('User {} voted nae.'.format(vote.author))
-							voted.append(vote.author)
-				in_channel = [m for m in message.server.members if m.status == discord.Status.online and message.channel.permissions_for(m).send_messages and not m.bot]
-				requirement = 0
-				if len(in_channel) == 2 or len(in_channel) == 1:
-					requirement = 1
-				else:
-					requirement = math.ceil(len(in_channel) / 2)
-					#requirement = 1
-				if y >= requirement:
-					await asyncio.sleep(1)
-					await client.send_message(message.channel, 'The vote has passed. The user {} has been shushed. Use !unshush (user) to undo this.'.format(message.server.get_member(shushuser)))
-					configtxt['shushed'] = str(shushuser)
-				else:
-					await client.send_typing(message.channel)
-					await asyncio.sleep(1)
-					await client.send_message(message.channel, 'The vote has failed.')
-				with open('config.json', 'w') as outfile:
-					json.dump(configtxt, outfile)
-				
+    '''
+    Executed when the bot recieves a message.
+    [message] is a discord.Message object, representing the sent message.
+    '''
+    cont = True
 
-			elif message.content.startswith('!unshush'):
-				shushuser = configtxt['shushed']
-				print('User {} used unshush command on user {}'.format(message.author, message.server.get_member(shushuser)))
-				await client.send_typing(message.channel)
-				await asyncio.sleep(0.5)
-				vote_start = await client.send_message(message.channel, "Starting a vote to unshush {}. Respond with either 'aye' or 'nae' within the next 30 seconds to cast your vote.".format(message.server.get_member(shushuser)))
-				voted = []
-				y = 0
-				await asyncio.sleep(15)
-				async for vote in client.logs_from(message.channel, limit=100, after=vote_start):
-					if vote.author in voted or vote.author.id == shushuser:
-						continue
-					else:
-						if check_vote(vote.content) is None:
-							continue
-						elif check_vote(vote.content):
-							y += 1
-							print('User {} voted aye.'.format(vote.author))
-							voted.append(vote.author)
-						else:
-							print('User {} voted nae.'.format(vote.author))
-							voted.append(vote.author)
-				in_channel = [m for m in message.server.members if m.status == discord.Status.online and message.channel.permissions_for(m).send_messages and not m.bot]
-				requirement = 0
-				if len(in_channel) == 2 or len(in_channel) == 1:
-					requirement = 1
-				else:
-					requirement = math.ceil(len(in_channel) / 2)
-					#requirement = 1
-				if y >= requirement:
-					await asyncio.sleep(1)
-					await client.send_message(message.channel, 'The vote has passed. The user {} has been unshushed. Use !shush (user) to redo this.'.format(message.server.get_member(shushuser)))
-					configtxt['shushed'] = ''
-				else:
-					await client.send_typing(message.channel)
-					await asyncio.sleep(1)
-					await client.send_message(message.channel, 'The vote has failed.')
-				with open('config.json', 'w') as outfile:
-					json.dump(configtxt, outfile)
+    # execute Precommands
+    for func in cacobot.base.pres:
+        cont = await cacobot.base.pres[func](message, client)
+        if not cont:
+            return
 
-			elif message.content.startswith('!isshushed'):
-				if configtxt['shushed'] == '':
-					await client.send_message(message.channel, 'No one is currently shushed.')
-				else:
-					await client.send_message(message.channel, 'The user {} is currently shushed.'.format(message.server.get_member(configtxt['shushed'])))
+    if message.content.startswith(config['invoker']) and \
+     message.author.id != client.user.id and \
+     len(message.content) > 1:
+        command = message.content.split()[0][len(cacobot.base.config['invoker']):].lower()
+        # So basically if the message was ".Repeat Butt talker!!!" this
+        # would be "repeat"
+        if command in cacobot.base.functions:
+            if message.channel.is_private or\
+            message.channel.permissions_for(message.server.me).send_messages:
+                await client.send_typing(message.channel)
+                await cacobot.base.functions[command](message, client)
+            else:
+                print('\n===========\nThe bot cannot send messages to #{} in the server "{}"!\n===========\n\nThis message is only showing up because I *tried* to send a message but it didn\'t go through. This probably means the mod team has tried to disable this bot, but someone is still trying to use it!\n\nHere is the command in question:\n\n{}\n\nThis was sent by {}.\n\nIf this message shows up a lot, the bot might be disabled in that server. You should just make it leave if the mod team isn\'t going to just kick it!'.format(
+                    message.channel.name,
+                    message.server.name,
+                    message.content,
+                    message.author.name
+                    )
+                ) # pylint: disable=c0330
 
-			elif message.content.lower() == 'apsbot are you there':
-				await client.send_message(message.channel, 'Yes.')
-			
-			elif message.content.lower() == '!update' and message.author == message.server.get_member('283414992752082945'):
-				print('Closing to update')
-				os.system('gitpull.bat')
-				sys.exit()
-
-			elif message.author == message.server.get_member('283414992752082945') and message.content.startswith('!off'):
-				await client.close()
-
-
-			
-
+    for func in cacobot.base.posts:
+        await cacobot.base.posts[func](message, client)
 
 @client.event
 async def on_error(*args):
+    '''
+    This event is basically a script-spanning `except` statement.
+    '''
+    # args[0] is the message that was recieved prior to the error. At least,
+    # it should be. We check it first in case the cause of the error wasn't a
+    # message.
     print('An error has been caught.')
     print(traceback.format_exc())
     if len(args) > 1:
@@ -213,13 +128,13 @@ async def on_error(*args):
                     await client.send_message(
                         args[1].channel,
                         '{}\n{}: You caused {} **{}** with your command.'.format(
-                            choice(configtxt['error_messages']),
+                            choice(config['error_messages']),
                             args[1].author.name,
                             aan(sys.exc_info()[0].__name__),
                             sys.exc_info()[0].__name__)
                         )
 
-client.run(configtxt['token'])
+client.run(config['token'])
 
 config.close()
 
