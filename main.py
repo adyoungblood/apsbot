@@ -54,7 +54,7 @@ async def on_message(message):
 
     # execute Precommands
     for func in apsbot.base.pres:
-        cont = await apsbot.base.pres[func](message, client)
+        cont = await apsbot.base.pres[func](client, message)
         if not cont:
             return
 
@@ -68,7 +68,7 @@ async def on_message(message):
             if message.channel.is_private or\
             message.channel.permissions_for(message.server.me).send_messages:
                 await client.send_typing(message.channel)
-                await apsbot.base.functions[command](message, client)
+                await apsbot.base.functions[command](client, message)
             else:
                 print('\n===========\nThe bot cannot send messages to #{} in the server "{}"!\n===========\n\nThis message is only showing up because I *tried* to send a message but it didn\'t go through. This probably means the mod team has tried to disable this bot, but someone is still trying to use it!\n\nHere is the command in question:\n\n{}\n\nThis was sent by {}.\n\nIf this message shows up a lot, the bot might be disabled in that server. You should just make it leave if the mod team isn\'t going to just kick it!'.format(
                     message.channel.name,
@@ -79,7 +79,7 @@ async def on_message(message):
                 ) # pylint: disable=c0330
 
     for func in apsbot.base.posts:
-        await apsbot.base.posts[func](message, client)
+        await apsbot.base.posts[func](client, message)
 
 @client.event
 async def on_error(*args):
