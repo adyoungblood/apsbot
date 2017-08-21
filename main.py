@@ -59,7 +59,7 @@ async def yui_balance():
 		if word.isdigit():
 			daily.append(word)
 
-	with open('bronze_data', 'a+') as bronze_data:
+	with open('bronze_data.txt', 'a+') as bronze_data:
 		bronze_data.write("{}, ".format(daily[2]))
 	
 	await asyncio.sleep(3600)
