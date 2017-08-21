@@ -52,15 +52,18 @@ async def yui_balance():
 	
 	msg = await client.wait_for_message(author=client.get_server('330801853455663107').get_member('280497242714931202'), channel=client.get_server('330801853455663107').get_channel('344859521157693440'), timeout=10)
 	
-	daily = []
-	for word in msg.content.split():
-		word = word.strip('**')
-		word = word.replace(',', '')
-		if word.isdigit():
-			daily.append(word)
+	try:
+		daily = []
+		for word in msg.content.split():
+			word = word.strip('**')
+			word = word.replace(',', '')
+			if word.isdigit():
+				daily.append(word)
 
-	with open('bronze_data.txt', 'a+') as bronze_data:
-		bronze_data.write("{}, ".format(daily[2]))
+		with open('bronze_data.txt', 'a+') as bronze_data:
+			bronze_data.write("{}, ".format(daily[2]))
+	except:
+		pass
 	
 	await asyncio.sleep(3600)
 	
