@@ -60,6 +60,7 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------')
+    await client.send_message(client.get_server('330801853455663107').get_channel('344859521157693440'), 'Ready')
 
 @client.event
 async def on_message(message):
