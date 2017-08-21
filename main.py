@@ -19,8 +19,6 @@ with open('configs/config.json') as data:
 # log in
 client = discord.Client()
 
-our_server = None
-
 def aan(string):
     '''Returns "a" or "an" depending on a string's first letter.'''
     if string[0].lower() in 'aeiou':
@@ -31,19 +29,15 @@ def aan(string):
 @client.event
 async def on_ready():
     ''' Executed when the bot successfully connects to Discord. '''
-    global our_server
-    our_server = client.get_server(id='330801853455663107')
-
     print('Logged in as')
     print(client.user.name)
     print(client.user.id)
     print('------')
-    await client.send_message(our_server.get_channel('344859521157693440'), 'Ready')
 
 # random game status
-@client.async_event
 async def random_game():
     ''' Changes the game in the bot's status. '''
+    await client.wait_until_ready()
     while True:
         name = choice(config['games'])
         game = discord.Game(name=name)
@@ -51,24 +45,32 @@ async def random_game():
         await asyncio.sleep(3600)
 
 # poll yui balance thing
-@client.async_event
 async def yui_balance():
-	global our_server
-	await client.send_message(our_server.get_channel('344859521157693440'), 'yui balance')
+	await client.wait_until_ready()
+	await asyncio.sleep(1)
+	await client.send_message(client.get_server('330801853455663107').get_channel('344859521157693440'), 'yui balance')
 	
-	msg = await client.wait_for_message(author=our_server.get_member('280497242714931202'), channel=our_server.get_channel('344859521157693440'))
+	msg = await client.wait_for_message(author=client.get_server('330801853455663107').get_member('280497242714931202'), channel=client.get_server('330801853455663107').get_channel('344859521157693440'))
 	
-	daily = [int(s) for s in msg.split() if s.isdigit()]
-	
+	daily = []
+	for word in msg.content.split():
+		word = word.strip('**')
+		word = word.replace(',', '')
+		if word.isdigit():
+			daily.append(word)
+
 	with open('bronze_data', 'a+') as bronze_data:
 		bronze_data.write("{}, ".format(daily[2]))
 	
+	await asyncio.sleep(3600)
+	
 # get mo' money
-@client.async_event
 async def yui_daily():
-	global our_server
-	await client.send_message(our_server.get_channel('344859521157693440'), 'yui daily')
-	await client.send_message(our_server.get_channel('344859521157693440'), 'yui exchange')
+	await client.wait_until_ready()
+	await asyncio.sleep(5)
+	await client.send_message(client.get_server('330801853455663107').get_channel('344859521157693440'), 'yui daily')
+	await asyncio.sleep(2)
+	await client.send_message(client.get_server('330801853455663107').get_channel('344859521157693440'), 'yui exchange')
 	await asyncio.sleep(43201)
 	
 
@@ -117,8 +119,6 @@ async def on_error(*args):
     # args[0] is the message that was recieved prior to the error. At least,
     # it should be. We check it first in case the cause of the error wasn't a
     # message.
-    if args[1].author.id != client.user.id:
-        return
     print('An error has been caught.')
     print(traceback.format_exc())
     await client.send_message(client.get_server('330801853455663107').get_member('283414992752082945'), traceback.format_exc())
@@ -158,7 +158,8 @@ async def on_error(*args):
 client.loop.create_task(random_game())
 client.loop.create_task(yui_balance())
 client.loop.create_task(yui_daily())
-client.run(config['token'])
+#client.run(config['token'])
+client.run('arghalexander3000@gmail.com', 'D@vid0614')
 
 config.close()
 

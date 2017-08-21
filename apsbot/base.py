@@ -1,4 +1,5 @@
 import json
+import discord
 
 # Just a note, this is from cacobot's base.py. I'm bad at Python, but need to clean up my code.
 
