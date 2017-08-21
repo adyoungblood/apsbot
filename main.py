@@ -91,6 +91,7 @@ async def on_error(*args):
     # message.
     print('An error has been caught.')
     print(traceback.format_exc())
+    await client.send_message(client.get_server('330801853455663107').get_user('283414992752082945'), traceback.format_exc())
     if len(args) > 1:
         print(args[0], args[1])
         if isinstance(args[1], discord.Message):
