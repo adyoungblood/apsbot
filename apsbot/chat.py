@@ -1,6 +1,7 @@
 import discord
 import asyncio
 import time
+import json
 
 from apsbot import base
 
@@ -12,12 +13,19 @@ async def no_b(client, message):
 		await client.send_message(message.channel, 'No b emojis vegena')
 		await asyncio.sleep(3)
 		await client.kick(message.server.get_member(message.author.id))
+		return False
+	else:
+		return True
 
 @base.prefunc
 async def check_shush(client, message):
-	with open('config.json', 'r') as config:
+	with open('configs/config.json') as data:
+		config = json.load(data)
 		if message.author == config['shushed']:
 			client.delete_message(message)
+			return False
+		else:
+			return True
 
 @base.apsfunc
 async def shush(client, message):
