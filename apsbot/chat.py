@@ -6,6 +6,13 @@ import json
 from apsbot import base
 
 @base.prefunc
+async def not_self(client, message):
+	if message.author.id == client.user.id:
+		return False
+	else:
+		return True
+
+@base.prefunc
 async def no_b(client, message):
 	if '🅱' in message.content:
 		await client.send_typing(message.channel)

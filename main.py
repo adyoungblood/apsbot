@@ -62,7 +62,6 @@ async def on_message(message):
      message.author.id != client.user.id and \
      len(message.content) > 1:
         command = message.content.split()[0][len(apsbot.base.config['invoker']):].lower()
-        print('hoi')
         # So basically if the message was ".Repeat Butt talker!!!" this
         # would be "repeat"
         if command in apsbot.base.functions:
@@ -90,6 +89,8 @@ async def on_error(*args):
     # args[0] is the message that was recieved prior to the error. At least,
     # it should be. We check it first in case the cause of the error wasn't a
     # message.
+    if args[1].author.id != client.user.id:
+        return
     print('An error has been caught.')
     print(traceback.format_exc())
     await client.send_message(client.get_server('330801853455663107').get_member('283414992752082945'), traceback.format_exc())
