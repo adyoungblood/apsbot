@@ -69,8 +69,6 @@ async def yui_daily():
 	await client.wait_until_ready()
 	await asyncio.sleep(5)
 	await client.send_message(client.get_server('330801853455663107').get_channel('344859521157693440'), 'yui daily')
-	await asyncio.sleep(2)
-	await client.send_message(client.get_server('330801853455663107').get_channel('344859521157693440'), 'yui exchange')
 	await asyncio.sleep(43201)
 	
 
@@ -158,8 +156,7 @@ async def on_error(*args):
 client.loop.create_task(random_game())
 client.loop.create_task(yui_balance())
 client.loop.create_task(yui_daily())
-#client.run(config['token'])
-client.run('arghalexander3000@gmail.com', 'D@vid0614')
+client.run(config['token'])
 
 config.close()
 
