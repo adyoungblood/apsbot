@@ -1,6 +1,7 @@
 import discord
 import asyncio
 
+import apsbot
 from apsbot import base
 from apsbot.base import pres, functions, posts
 
