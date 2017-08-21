@@ -44,7 +44,7 @@ async def yui_balance():
 	daily = [int(s) for s in msg.split() if s.isdigit()]
 	
 	with open('bronze_data', 'a+') as bronze_data:
-		bronze_data.write("{}, ".format(daily[2])
+		bronze_data.write("{}, ".format(daily[2]))
 	
 # get mo' money
 async def yui_daily():
