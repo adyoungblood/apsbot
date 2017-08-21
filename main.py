@@ -35,6 +35,24 @@ async def random_game():
         await client.change_presence(game=game)
         await asyncio.sleep(3600)
 
+# poll yui balance thing
+async def yui_balance():
+	await client.send_message(client.get_server('330801853455663107').get_channel('344859521157693440'), 'yui balance')
+	
+	msg = await client.wait_for_message(author=client.get_server('330801853455663107').get_member('280497242714931202'), channel=client.get_server('330801853455663107').get_channel('344859521157693440'))
+	
+	daily = [int(s) for s in msg.split() if s.isdigit()]
+	
+	with open('bronze_data', 'a+') as bronze_data:
+		bronze_data.write("{}, ".format(daily[2])
+	
+# get mo' money
+async def yui_daily():
+	await client.send_message(client.get_server('330801853455663107').get_channel('344859521157693440'), 'yui daily')
+	await client.send_message(client.get_server('330801853455663107').get_channel('344859521157693440'), 'yui exchange')
+	await asyncio.sleep(43201)
+	
+	
 @client.event
 async def on_ready():
     ''' Executed when the bot successfully connects to Discord. '''
@@ -42,7 +60,6 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------')
-    await random_game()
 
 @client.event
 async def on_message(message):
@@ -127,6 +144,9 @@ async def on_error(*args):
                             sys.exc_info()[0].__name__)
                         )
 
+client.loop.create_task(random_game())
+client.loop.create_task(yui_balance())
+client.loop.create_task(yui_daily())
 client.run(config['token'])
 
 config.close()
