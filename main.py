@@ -50,7 +50,7 @@ async def yui_balance():
 	await asyncio.sleep(1)
 	await client.send_message(client.get_server('330801853455663107').get_channel('344859521157693440'), 'yui balance')
 	
-	msg = await client.wait_for_message(author=client.get_server('330801853455663107').get_member('280497242714931202'), channel=client.get_server('330801853455663107').get_channel('344859521157693440'))
+	msg = await client.wait_for_message(author=client.get_server('330801853455663107').get_member('280497242714931202'), channel=client.get_server('330801853455663107').get_channel('344859521157693440'), timeout=10)
 	
 	daily = []
 	for word in msg.content.split():
