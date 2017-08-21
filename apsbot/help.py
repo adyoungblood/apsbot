@@ -2,6 +2,7 @@ import discord
 import asyncio
 
 from apsbot import base
+from base import pres, functions, posts
 
 @base.apsfunc
 async def help(client, message):
