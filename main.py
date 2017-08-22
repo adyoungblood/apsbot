@@ -38,7 +38,7 @@ async def on_ready():
 async def random_game():
     ''' Changes the game in the bot's status. '''
     await client.wait_until_ready()
-    while True:
+    while not client.is_closed:
         name = choice(config['games'])
         game = discord.Game(name=name)
         await client.change_presence(game=game, afk=False)
@@ -48,11 +48,12 @@ async def random_game():
 async def yui_balance():
 	await client.wait_until_ready()
 	await asyncio.sleep(1)
-	await client.send_message(client.get_server('330801853455663107').get_channel('344859521157693440'), 'yui balance')
+        while not client.is_closed:
+            await client.send_message(client.get_server('330801853455663107').get_channel('344859521157693440'), 'yui balance')
 	
-	msg = await client.wait_for_message(author=client.get_server('330801853455663107').get_member('280497242714931202'), channel=client.get_server('330801853455663107').get_channel('344859521157693440'), timeout=10)
+            msg = await client.wait_for_message(author=client.get_server('330801853455663107').get_member('280497242714931202'), channel=client.get_server('330801853455663107').get_channel('344859521157693440'), timeout=10)
 	
-	try:
+            try:
 		daily = []
 		for word in msg.content.split():
 			word = word.strip('**')
@@ -62,17 +63,18 @@ async def yui_balance():
 
 		with open('bronze_data.txt', 'a+') as bronze_data:
 			bronze_data.write("{}, ".format(daily[2]))
-	except:
+            except:
 		pass
 	
-	await asyncio.sleep(3600)
+            await asyncio.sleep(3600)
 	
 # get mo' money
 async def yui_daily():
 	await client.wait_until_ready()
 	await asyncio.sleep(5)
-	await client.send_message(client.get_server('330801853455663107').get_channel('344859521157693440'), 'yui daily')
-	await asyncio.sleep(43201)
+        while not client.is_closed:
+            await client.send_message(client.get_server('330801853455663107').get_channel('344859521157693440'), 'yui daily')
+            await asyncio.sleep(43201)
 	
 
 @client.event
