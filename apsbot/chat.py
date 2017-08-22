@@ -7,6 +7,7 @@ from apsbot import base
 
 @base.prefunc
 async def not_self(client, message):
+	'''Checks if the message sent is not by the bot itself.'''
 	if message.author.id == client.user.id:
 		return False
 	else:
@@ -14,6 +15,7 @@ async def not_self(client, message):
 
 @base.prefunc
 async def no_b(client, message):
+	'''The B emoji is cursed, never use it.'''
 	if '🅱' in message.content:
 		await client.send_typing(message.channel)
 		await asyncio.sleep(1)
@@ -26,6 +28,7 @@ async def no_b(client, message):
 
 @base.prefunc
 async def check_shush(client, message):
+	'''Checks to see if the poster is shushed; deletes message if so.'''
 	with open('configs/config.json') as data:
 		config = json.load(data)
 		if message.author == config['shushed']:
@@ -36,6 +39,9 @@ async def check_shush(client, message):
 
 @base.apsfunc
 async def shush(client, message):
+	'''**{0}shush <user>**
+	Starts a vote to shush the user called.
+	*Example: '{0}shush navid*'''
 	try:
 		shushuser = message.content.split(' ')[1]
 		shushuser = discord.utils.find(lambda m: m.name == shushuser, message.server.members)
@@ -83,6 +89,9 @@ async def shush(client, message):
 
 @base.apsfunc
 async def unshush(client, message):
+	'''**{0}unshush <user>
+	Starts a vote to unshush a user.
+	*Example: '{0}unshush navid*'''
 	shushuser = configtxt['shushed']
 	await client.send_typing(message.channel)
 	await asyncio.sleep(0.5)
@@ -123,6 +132,8 @@ async def unshush(client, message):
 
 @base.apsfunc
 async def isshushed(client, message):
+	'''**{0}isshushed**
+	Replies with the currently shushed user.'''
 	if configtxt['shushed'] == '':
 		await client.send_message(message.channel, 'No one is currently shushed.')
 	else:
@@ -130,10 +141,13 @@ async def isshushed(client, message):
 
 @base.apsfunc
 async def youthere(client, message):
+	'''**{0}youthere**
+	A basic check to see if apsbot is online.'''
 	await client.send_message(message.channel, 'Yes.')
 	
 @base.apsfunc
 async def update(client, message):
+	'''If you are me, then this command tells apsbot to shut down and update from the Github repo.'''
 	if message.author == message.server.get_member('283414992752082945'):
 		await client.send_message(message.channel, 'Updating')
 		print('Closing to update')
@@ -142,6 +156,7 @@ async def update(client, message):
 		
 @base.apsfunc
 async def off(client, message):
+	'''If you are me, turns the bot off. I will have to manually restart it afterwards.'''
 	if message.author == message.server.get_member('283414992752082945'):
 		await client.close()
 
