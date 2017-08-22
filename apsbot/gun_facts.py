@@ -9,4 +9,4 @@ async def gunfact(client, message):
 	Facts courtesy of from Louis Leon.
 	*Example: '{0}gunfact'*"""
 	with open('gunfacts.txt', 'r') as gunfacts:
-		await client.send_message(message.channel, choice(gunfacts))
+		await client.send_message(message.channel, "Here's a little fact: {}".format(choice(gunfacts)))
