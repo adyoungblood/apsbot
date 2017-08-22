@@ -2,6 +2,7 @@ import discord
 import asyncio
 import time
 import json
+import os
 
 from apsbot import base
 
