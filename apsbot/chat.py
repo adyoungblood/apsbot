@@ -41,7 +41,7 @@ async def check_shush(client, message):
 async def shush(client, message):
 	'''**{0}shush <user>**
 	Starts a vote to shush the user called.
-	*Example: '{0}shush navid*'''
+	*Example: '{0}shush navid'*'''
 	try:
 		shushuser = message.content.split(' ')[1]
 		shushuser = discord.utils.find(lambda m: m.name == shushuser, message.server.members)
@@ -91,7 +91,7 @@ async def shush(client, message):
 async def unshush(client, message):
 	'''**{0}unshush <user>
 	Starts a vote to unshush a user.
-	*Example: '{0}unshush navid*'''
+	*Example: '{0}unshush navid'*'''
 	shushuser = configtxt['shushed']
 	await client.send_typing(message.channel)
 	await asyncio.sleep(0.5)
