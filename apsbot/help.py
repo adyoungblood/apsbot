@@ -1,5 +1,6 @@
 import discord
 import asyncio
+import inspect
 
 import apsbot.base as base
 
