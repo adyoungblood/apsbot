@@ -169,3 +169,4 @@ config.close()
 with open('config.json', 'w') as outfile:
 	json.dump(configtxt, outfile)
 client.logout()
+asyncio.sleep(10)

@@ -150,7 +150,7 @@ async def youthere(client, message):
 async def update(client, message):
 	'''If you are me, then this command tells apsbot to shut down and update from the Github repo.'''
 	if message.author == message.server.get_member('283414992752082945'):
-		await client.send_message(message.channel, 'Updating')
+		await client.send_message(message.channel, 'Closing to update, brb')
 		print('Closing to update')
 		os.system('gitpull.bat')
 		sys.exit()
