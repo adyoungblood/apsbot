@@ -47,7 +47,7 @@ async def random_game():
 # poll yui balance thing
 async def yui_balance():
 	await client.wait_until_ready()
-	await asyncio.sleep(1)
+	await asyncio.sleep(5)
         while not client.is_closed:
             await client.send_message(client.get_server('330801853455663107').get_channel('344859521157693440'), 'yui balance')
 	
@@ -71,7 +71,7 @@ async def yui_balance():
 # get mo' money
 async def yui_daily():
 	await client.wait_until_ready()
-	await asyncio.sleep(5)
+	await asyncio.sleep(1)
         while not client.is_closed:
             await client.send_message(client.get_server('330801853455663107').get_channel('344859521157693440'), 'yui daily')
             await asyncio.sleep(43201)
