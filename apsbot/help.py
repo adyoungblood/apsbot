@@ -5,7 +5,7 @@ import apsbot.base as base
 
 
 @base.apsfunc
-async def help(message, client): # pylint: disable=W0622
+async def help(client, message): # pylint: disable=W0622
     '''
     *Cheeky, ain't ya?*
     **{0}help** [*cmd*]
