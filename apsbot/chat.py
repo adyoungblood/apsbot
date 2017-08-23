@@ -49,7 +49,7 @@ async def shush(client, message):
 	except:
 		await client.send_message(message.channel, 'That user is invalid. Try again.')
 		return
-        await client.send_message(message.channel, shushuser)
+		await client.send_message(message.channel, shushuser)
 	shushuser = shushuser.id
 	print('User {} used shush command on user {}'.format(message.author, message.server.get_member(shushuser)))
 	await client.send_typing(message.channel)
