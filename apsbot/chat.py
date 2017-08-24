@@ -57,7 +57,11 @@ async def shush(client, message):
 	Starts a vote to shush the user called.
 	*Example: '{0}shush navid'*'''
 	shushuser = message.content.split(' ')[1]
-	shushuser = discord.utils.find(lambda m: m.nick.lower() == shushuser.lower(), message.server.members)
+	try:
+		shushuser = discord.utils.find(lambda m: m.nick.lower() == shushuser.lower(), message.server.members)
+	except AttributeError:
+		await client.send_message(message.channel, 'Search by *nicknames*, not actual usernames.')
+		return
 	if not shushuser:
 		await client.send_message(message.channel, 'That user is invalid. Try again.')
 		return
