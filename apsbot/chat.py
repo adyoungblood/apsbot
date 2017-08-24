@@ -60,7 +60,7 @@ async def shush(client, message):
 	try:
 		shushuser = discord.utils.find(lambda m: m.nick.lower() == shushuser.lower(), message.server.members)
 	except AttributeError:
-		await client.send_message(message.channel, 'Search by *nicknames*, not actual usernames.')
+		await client.send_message(message.channel, 'I couldn\'t find that user. Remember to search by nickname.')
 		return
 	if not shushuser:
 		await client.send_message(message.channel, 'That user is invalid. Try again.')
