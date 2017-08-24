@@ -20,9 +20,9 @@ def check_vote(string):
 			return(None)
 
 @base.prefunc
-async def not_self(client, message):
-	'''Checks if the message sent is not by the bot itself.'''
-	if message.author.id == client.user.id:
+async def not_bot(client, message):
+	'''Checks if the message sent is not by a bot.'''
+	if message.author.bot:
 		return False
 	else:
 		return True
