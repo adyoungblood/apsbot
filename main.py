@@ -159,14 +159,14 @@ async def on_error(*args):
 							sys.exc_info()[0].__name__)
 						)
 
-client.loop.create_task(random_game())
-client.loop.create_task(yui_balance())
-client.loop.create_task(yui_daily())
+#client.loop.create_task(random_game())
+#client.loop.create_task(yui_balance())
+#client.loop.create_task(yui_daily())
 client.run(config['token'])
 
 config.close()
 
-with open('config.json', 'w') as outfile:
-	json.dump(configtxt, outfile)
+with open('config/sconfig.json', 'w') as outfile:
+	json.dump(config, outfile)
 client.logout()
 asyncio.sleep(10)

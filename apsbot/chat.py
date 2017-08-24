@@ -3,8 +3,20 @@ import asyncio
 import time
 import json
 import os
+import re
 
 from apsbot import base
+from apsbot.base import config
+
+def check_vote(string):
+	string = string.split()
+	for word in string:
+		if re.fullmatch('aye*?', word):
+			return(True)
+		elif re.fullmatch('nae*?', word):
+			return(False)
+		else:
+			return(None)
 
 @base.prefunc
 async def not_self(client, message):
@@ -30,10 +42,10 @@ async def no_b(client, message):
 @base.prefunc
 async def check_shush(client, message):
 	'''Checks to see if the poster is shushed; deletes message if so.'''
-	with open('configs/config.json') as data:
+	with open('configs/config.json', 'r') as data:
 		config = json.load(data)
-		if message.author == config['shushed']:
-			client.delete_message(message)
+		if message.author.id == config['shushed']:
+			await client.delete_message(message)
 			return False
 		else:
 			return True
@@ -43,23 +55,21 @@ async def shush(client, message):
 	'''**{0}shush <user>**
 	Starts a vote to shush the user called.
 	*Example: '{0}shush navid'*'''
-	try:
-		shushuser = message.content.split(' ')[1]
-		shushuser = discord.utils.find(lambda m: m.name == shushuser, message.server.members)
-	except:
+	shushuser = message.content.split(' ')[1]
+	shushuser = discord.utils.find(lambda m: m.nick.lower() == shushuser.lower(), message.server.members)
+	if not shushuser:
 		await client.send_message(message.channel, 'That user is invalid. Try again.')
 		return
-		await client.send_message(message.channel, shushuser)
 	shushuser = shushuser.id
 	print('User {} used shush command on user {}'.format(message.author, message.server.get_member(shushuser)))
 	await client.send_typing(message.channel)
 	await asyncio.sleep(0.5)
-	vote_start = await client.send_message(message.channel, "Starting a vote to shush {}. Respond with either 'aye' or 'nae' within the next 30 seconds to cast your vote.".message.server.get_member(shushuser))
+	vote_start = await client.send_message(message.channel, "Starting a vote to shush {}. Respond with either 'aye' or 'nae' within the next 15 seconds to cast your vote.".format(message.server.get_member(shushuser)))
 	voted = []
 	y = 0
 	await asyncio.sleep(15)
 	async for vote in client.logs_from(message.channel, limit=100, after=vote_start):
-		if vote.author in voted or vote.author == shushed:
+		if vote.author in voted or vote.author == config['shushed']:
 			continue
 		else:
 			if check_vote(vote.content) is None:
@@ -80,29 +90,29 @@ async def shush(client, message):
 		#requirement = 1
 	if y >= requirement:
 		await asyncio.sleep(1)
-		await client.send_message(message.channel, 'The vote has passed. The user {} has been shushed. Use !unshush (user) to undo this.'.format(message.server.get_member(shushuser)))
-		configtxt['shushed'] = str(shushuser)
+		await client.send_message(message.channel, 'The vote has passed. The user {} has been shushed. Use {}unshush (user) to undo this.'.format(message.server.get_member(shushuser), config['invoker']))
+		config['shushed'] = str(shushuser)
 	else:
 		await client.send_typing(message.channel)
 		await asyncio.sleep(1)
 		await client.send_message(message.channel, 'The vote has failed.')
-	with open('config.json', 'w') as outfile:
-		json.dump(configtxt, outfile)
+	with open('configs/config.json', 'w') as configfile:
+		json.dump(config, configfile)
 
 @base.apsfunc
 async def unshush(client, message):
 	'''**{0}unshush <user>
-	Starts a vote to unshush a user.
-	*Example: '{0}unshush navid'*'''
-	shushuser = configtxt['shushed']
+	Starts a vote to unshush the currently shushed user.
+	*Example: '{0}unshush'*'''
+	print('User {} used unshush command on user {}'.format(message.author, config['shushed']))
 	await client.send_typing(message.channel)
 	await asyncio.sleep(0.5)
-	vote_start = await client.send_message(message.channel, "Starting a vote to unshush {}. Respond with either 'aye' or 'nae' within the next 30 seconds to cast your vote.".format(message.server.get_member(shushuser)))
+	vote_start = await client.send_message(message.channel, "Starting a vote to unshush {}. Respond with either 'aye' or 'nae' within the next 15 seconds to cast your vote.".format(message.server.get_member(config['shushed'])))
 	voted = []
 	y = 0
 	await asyncio.sleep(15)
 	async for vote in client.logs_from(message.channel, limit=100, after=vote_start):
-		if vote.author in voted or vote.author.id == shushuser:
+		if vote.author in voted or vote.author == config['shushed']:
 			continue
 		else:
 			if check_vote(vote.content) is None:
@@ -123,23 +133,23 @@ async def unshush(client, message):
 		#requirement = 1
 	if y >= requirement:
 		await asyncio.sleep(1)
-		await client.send_message(message.channel, 'The vote has passed. The user {} has been unshushed. Use !shush (user) to redo this.'.format(message.server.get_member(shushuser)))
-		configtxt['shushed'] = ''
+		await client.send_message(message.channel, 'The vote has passed. The user {} has been unshushed. Use {}shush (user) to redo this.'.format(message.server.get_member(config['shushed']), config['invoker']))
+		config['shushed'] = ''
 	else:
 		await client.send_typing(message.channel)
 		await asyncio.sleep(1)
 		await client.send_message(message.channel, 'The vote has failed.')
-	with open('config.json', 'w') as outfile:
-		json.dump(configtxt, outfile)
+	with open('configs/config.json', 'w') as configfile:
+		json.dump(config, configfile)
 
 @base.apsfunc
 async def isshushed(client, message):
 	'''**{0}isshushed**
 	Replies with the currently shushed user.'''
-	if configtxt['shushed'] == '':
+	if config['shushed'] == '':
 		await client.send_message(message.channel, 'No one is currently shushed.')
 	else:
-		await client.send_message(message.channel, 'The user {} is currently shushed.'.format(message.server.get_member(configtxt['shushed'])))
+		await client.send_message(message.channel, 'The user {} is currently shushed.'.format(message.server.get_member(config['shushed'])))
 
 @base.apsfunc
 async def youthere(client, message):
