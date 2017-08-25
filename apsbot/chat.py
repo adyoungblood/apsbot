@@ -56,11 +56,24 @@ async def shush(client, message):
 	'''**{0}shush <user>**
 	Starts a vote to shush the user called.
 	*Example: '{0}shush navid'*'''
-	shushuser = message.content.split(' ')[1]
+	membersreal = message.server.members
+	members = []
+	for member in membersreal:
+		if member.bot:
+			return
+		elif member.nick == None:
+			members.append(member.name)
+		else:
+			members.append(member.nick)
 	try:
-		shushuser = discord.utils.find(lambda m: m.nick.lower() == shushuser.lower(), message.server.members)
+		shushuser = message.content.split(' ')[1]
+	except IndexError:
+		await client.send_message(message.channel, 'Please provide a member.')
+		return
+	try:
+		shushuser = discord.utils.find(lambda m: shushuser.lower() in m.nick.lower(), members)
 	except AttributeError:
-		await client.send_message(message.channel, 'I couldn\'t find that user. Remember to search by nickname.')
+		await client.send_message(message.channel, 'I couldn\'t find that user.')
 		return
 	if not shushuser:
 		await client.send_message(message.channel, 'That user is invalid. Try again.')
