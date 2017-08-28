@@ -19,3 +19,4 @@ async def addgunfact(client, message):
 			return
 		else:
 			base.facts.append(message.content.split[1])
+			await client.send_message(message.channel, 'Your fact was added.')
