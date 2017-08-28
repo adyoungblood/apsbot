@@ -1,4 +1,4 @@
-# Again, this is all from cacobot, because I'm bad. Sorry.
+# Again, the structure of this is from cacobot, because I'm bad. Sorry.
 
 # standard imports
 import sys # for tracebaks in on_error.
@@ -33,7 +33,7 @@ async def on_ready():
 	print(client.user.name)
 	print(client.user.id)
 	print('------')
-	await client.send_message(client.get_channel('283414992752082945'), 'Ready.')
+	await client.send_message(283414992752082945, 'Ready.')
 	await client.change_presence(game=discord.Game(name='hyperlul'), afk=False)
 
 # random game status
