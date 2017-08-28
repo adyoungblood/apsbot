@@ -14,7 +14,7 @@ async def gunfact(client, message):
 @base.apsfunc
 async def addgunfact(client, message):
 	if message.author.id == '283414992752082945':
-		if message.content.split[1] in base.facts:
+		if message.content.split()[1] in base.facts:
 			await client.send_message(message.channel, 'That\'s already been added.')
 			return
 		else:
