@@ -33,7 +33,7 @@ async def on_ready():
 	print(client.user.name)
 	print(client.user.id)
 	print('------')
-	await client.send_message(client.get_user('283414992752082945'), 'Ready.')
+	await client.send_message(client.get_server('330801853455663107').get_member('283414992752082945'), 'Ready.')
 	await client.change_presence(game=discord.Game(name='hyperlul'), afk=False)
 
 # random game status
