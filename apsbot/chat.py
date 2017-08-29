@@ -30,10 +30,10 @@ async def not_bot(client, message):
 @base.prefunc
 async def no_b(client, message):
 	'''The B emoji is cursed, never use it.'''
-	if '🅱' in message.content:
+	if '🅱' in message.content or 'thot' in message.content:
 		await client.send_typing(message.channel)
 		await asyncio.sleep(1)
-		await client.send_message(message.channel, 'No b emojis vegena')
+		await client.send_message(message.channel, 'That\s a banned word right there')
 		await asyncio.sleep(3)
 		await client.kick(message.server.get_member(message.author.id))
 		return False
