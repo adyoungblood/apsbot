@@ -61,7 +61,7 @@ async def help(client, message): # pylint: disable=W0622
                     base.config['git']['repo_name']
                 ))
             else:
-                await client.send_message(message.channel, ':heavy_exclamation_mark: This command has no docstring! Go tell UnFUsion that it\'s broken.')
+                await client.send_message(message.channel, ':heavy_exclamation_mark: This command has no docstring! Go tell UnFusion that it\'s broken.')
         else:
             for x in base.functions:
                 if hasattr(base.functions[x], 'server') and params[1].lower() == base.functions[x].server.lower():
