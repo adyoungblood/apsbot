@@ -165,7 +165,7 @@ async def on_error(*args):
 #client.loop.create_task(yui_daily())
 client.run(config['token'])
 
-await client.send_message(client.get_server('330801853455663107').get_member('283414992752082945'), 'I am going offline.')
+client.send_message(client.get_server('330801853455663107').get_member('283414992752082945'), 'I am going offline.')
 
 config.close()
 
