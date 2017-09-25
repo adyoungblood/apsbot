@@ -15,7 +15,7 @@ async def changecolor(client, message):
 		else:
 			await client.send_message(message.channel, role.name)
 	choice = await client.wait_for_message(author=message.author, timeout=30)
-	rolechoice = [s for s in message.author.roles if sub in s.name]
+	rolechoice = [s for s in message.author.roles if choice in s.name]
 	print(rolechoice)
 	'''
 	if choice > message.author.top_role or choice == 'everyone':
