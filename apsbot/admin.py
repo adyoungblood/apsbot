@@ -3,8 +3,8 @@ from apsbot.base import config
 
 @base.apsfunc
 async def changecolor(client, message):
-	'''**{0}changecolor <role> <color>**
-	Changes the color of the specified role.
+	'''**{0}changecolor>**
+	Allows you to change the color of the specified role.
 	I can't change roles higher than my own,
 	nor roles higher than yours.
 	When picking roles, if a search matches two or more roles, 
@@ -29,6 +29,11 @@ async def changecolor(client, message):
 		await client.send_message(message.channel, "Choose color to change {}'s color to.".format(rolechoice.name))
 		while True:
 			newcolor = await client.wait_for_message(author=message.author, timeout=30)
-			exec("await client.edit_role(message.server, message.author.role, color=discord.Color.{}())".format(newcolor.content))
+			newcolorval = exec("""
+			import discord
+			
+			return discord.Color.{}()
+			""".format(newcolor))
+			await client.edit_role(message.server, message.author.role, color=newcolorval)
 			break
 				
