@@ -20,4 +20,6 @@ async def changecolor(client, message):
 		try:
 			await client.edit_role(message.server, message.author.role, color
 	'''
-	print(message.author.roles)
+	for role in message.author.roles:
+		print(role.name)
+		print(role.id)
