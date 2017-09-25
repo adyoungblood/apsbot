@@ -1,7 +1,7 @@
 from apsbot import base
 from apsbot.base import config
 
-from discord.ext.commands import ColorConverter
+from discord.ext.commands import ColourConverter
 
 @base.apsfunc
 async def changecolor(client, message):
@@ -31,7 +31,7 @@ async def changecolor(client, message):
 		await client.send_message(message.channel, "Choose color to change {}'s color to.".format(rolechoice.name))
 		while True:
 			newcolor = await client.wait_for_message(author=message.author, timeout=30)
-			converter = ColorConverter(None, newcolor)
+			converter = ColourConverter(None, newcolor)
 			newcolorval = converter.convert()
 			await client.edit_role(message.server, message.author.role, color=newcolorval)
 			break
