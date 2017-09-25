@@ -36,4 +36,5 @@ async def changecolor(client, message):
 			newcolorval = converter.convert()
 			await client.edit_role(message.server, rolechoice, color=newcolorval)
 			break
+	await client.send_message(message.channel, "It is done.")
 				
