@@ -21,6 +21,7 @@ async def changecolor(client, message):
 		rolechoice = [s for s in message.author.roles if choice.content.lower() in s.name.lower()]
 		if rolechoice:
 			break
+	rolechoice = rolechoice[0]
 	if rolechoice >= message.author.top_role:
 		await client.send_message(message.channel, "I can't let you do that.")
 		return
