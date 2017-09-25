@@ -34,7 +34,7 @@ async def changecolor(client, message):
 			newcolor = await client.wait_for_message(author=message.author, timeout=30)
 			newcolor = newcolor.content
 			if newcolor == 'nevermind':
-				await client.send_message(client.channel, "OK.")
+				await client.send_message(message.channel, "OK.")
 				return
 			try:
 				converter = ColourConverter(None, newcolor)
