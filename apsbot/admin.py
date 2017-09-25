@@ -8,6 +8,7 @@ async def changecolor(client, message):
 	I can't change roles higher than my own,
 	nor roles higher than yours.
 	*Example: '{0}changecolor myrole green'*'''
+	/*
 	await client.send_message(message.server, "Choose a role to edit.")
 	choice = await client.wait_for_message(author=message.author, timeout=30)
 	if choice > message.author.top_role or choice == 'everyone':
@@ -17,4 +18,5 @@ async def changecolor(client, message):
 		await client.send_message(message.server, "Choose color to change {}'s color to.".format(choice))
 		newcolor = await client.wait_for_message(author=message.author, timeout=30)
 		try:
-			await client.edit_role(message.server, message.author.role, color=
+			await client.edit_role(message.server, message.author.role, color*/
+	print(message.author.roles)
