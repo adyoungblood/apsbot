@@ -29,6 +29,6 @@ async def changecolor(client, message):
 		await client.send_message(message.channel, "Choose color to change {}'s color to.".format(rolechoice.name))
 		while True:
 			newcolor = await client.wait_for_message(author=message.author, timeout=30)
-			exec("await client.edit_role(message.server, message.author.role, color=discord.Color.{}())".format(newcolor))
+			exec("await client.edit_role(message.server, message.author.role, color=discord.Color.{}())".format(newcolor.content))
 			break
 				
