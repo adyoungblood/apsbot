@@ -21,9 +21,14 @@ async def changecolor(client, message):
 			await client.send_message(message.channel, role.name)
 	while True:
 		choice = await client.wait_for_message(author=message.author, timeout=30)
-		rolechoice = [s for s in message.author.roles if choice.content.lower() in s.name.lower()]
-		if rolechoice:
-			break
+		if choice.content == 'nevermind':
+			return
+		else:
+			rolechoice = [s for s in message.author.roles if choice.content.lower() in s.name.lower()]
+			if rolechoice:
+				break
+			else:
+				await client.send_message(message.channel, "That's not a valid role. Choose another or say nevermind to exit.")
 	rolechoice = rolechoice[0]
 	if rolechoice.position >= message.author.top_role.position + 1:
 		await client.send_message(message.channel, "I can't let you do that.")
