@@ -2,6 +2,7 @@ from apsbot import base
 from apsbot.base import config
 
 from discord.ext.commands import ColourConverter
+from discord.ext.commands.errors import BadArgument
 
 @base.apsfunc
 async def changecolor(client, message):
@@ -32,9 +33,12 @@ async def changecolor(client, message):
 		while True:
 			newcolor = await client.wait_for_message(author=message.author, timeout=30)
 			newcolor = newcolor.content
-			converter = ColourConverter(None, newcolor)
-			newcolorval = converter.convert()
-			await client.edit_role(message.server, rolechoice, color=newcolorval)
-			break
+			try:
+				converter = ColourConverter(None, newcolor)
+				newcolorval = converter.convert()
+				await client.edit_role(message.server, rolechoice, color=newcolorval)
+				break
+			except BadArgument:
+				await client.send_message(message.channel, "That's not a valid color.")
 	await client.send_message(message.channel, "It is done.")
 				
