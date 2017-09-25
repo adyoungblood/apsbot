@@ -33,12 +33,15 @@ async def changecolor(client, message):
 		while True:
 			newcolor = await client.wait_for_message(author=message.author, timeout=30)
 			newcolor = newcolor.content
+			if newcolor == 'nevermind':
+				await client.send_message(client.channel, "OK.")
+				return
 			try:
 				converter = ColourConverter(None, newcolor)
 				newcolorval = converter.convert()
 				await client.edit_role(message.server, rolechoice, color=newcolorval)
 				break
 			except BadArgument:
-				await client.send_message(message.channel, "That's not a valid color.")
+				await client.send_message(message.channel, "That's not a valid color. Choose another one, or say nevermind to stop.")
 	await client.send_message(message.channel, "It is done.")
 				
