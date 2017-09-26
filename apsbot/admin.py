@@ -18,8 +18,9 @@ async def changecolor(client, message):
 	await client.send_message(message.channel, "Choose a role to edit:")
 	authorroles = []
 	for role in message.server.roles:
-		if role <= message.author.top_role and !role.managed:
-			authorroles.append(role)
+		if role <= message.author.top_role:
+			if !role.managed:
+				authorroles.append(role)
 	for role in authorroles:
 		print(role.name)
 		if role.name == '@everyone':
