@@ -1,6 +1,8 @@
 from apsbot import base
 from apsbot.base import config
 
+import asyncio
+
 from discord.ext.commands import ColourConverter
 from discord.ext.commands.errors import BadArgument
 
