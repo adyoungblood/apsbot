@@ -26,7 +26,7 @@ async def not_bot(client, message):
 		return False
 	else:
 		return True
-
+"""
 @base.prefunc
 async def no_b(client, message):
 	'''The B emoji is cursed, never use it.'''
@@ -39,7 +39,7 @@ async def no_b(client, message):
 		return False
 	else:
 		return True
-
+"""
 @base.prefunc
 async def check_shush(client, message):
 	'''Checks to see if the poster is shushed; deletes message if so.'''
