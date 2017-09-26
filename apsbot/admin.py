@@ -23,7 +23,8 @@ async def changecolor(client, message):
 		if role.name == '@everyone':
 			continue
 		else:
-			client.send_message(message.channel, role.name)
+			await client.send_message(message.channel, role.name)
+			await asyncio.sleep(0.5)
 	while True:
 		choice = await client.wait_for_message(author=message.author, timeout=30)
 		try:
