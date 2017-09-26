@@ -14,15 +14,15 @@ async def changecolor(client, message):
 	it will choose the first one that is returned.
 	*Example: '{0}changecolor myrole green'*'''
 	await client.send_message(message.channel, "Choose a role to edit:")
-	for role in message.author.roles:
-		if role.name == '@everyone':
-			continue
-		else:
-			await client.send_message(message.channel, role.name)
 	authorroles = []
 	for role in message.server.roles:
 		if role <= message.author.top_role:
 			authorroles.append(role)
+	for role in authorroles:
+		if role.name == '@everyone':
+			continue
+		else:
+			await client.send_message(message.channel, role.name)
 	while True:
 		choice = await client.wait_for_message(author=message.author, timeout=30)
 		if choice.content.lower() == 'nevermind':
