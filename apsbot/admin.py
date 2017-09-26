@@ -16,7 +16,7 @@ async def changecolor(client, message):
 	it will choose the first one that is returned.
 	*Example: '{0}changecolor myrole green'*'''
 	await client.send_message(message.channel, "Choose a role to edit:")
-	await asyncio.sleep(1)
+	await asyncio.sleep(0.5)
 	authorroles = []
 	for role in message.server.roles:
 		if role <= message.author.top_role and not role.managed:
