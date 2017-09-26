@@ -28,7 +28,7 @@ async def changecolor(client, message):
 		if choice.content.lower() == 'nevermind':
 			await client.send_message(message.channel, "OK.")
 			return
-		elif !choice.content.lower():
+		elif choice.content == '':
 			return
 		else:
 			rolechoice = [s for s in authorroles if choice.content.lower() in s.name.lower()]
