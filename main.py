@@ -45,37 +45,13 @@ async def random_game():
 		game = discord.Game(name=name)
 		await client.change_presence(game=game, afk=False)
 		await asyncio.sleep(3600)
-
-# poll yui balance thing
-async def yui_balance():
-	await client.wait_until_ready()
-	await asyncio.sleep(1)
-	while not client.is_closed:
-		await client.send_message(client.get_server('330801853455663107').get_channel('344859521157693440'), 'yui balance')
-
-		msg = await client.wait_for_message(author=client.get_server('330801853455663107').get_member('280497242714931202'), channel=client.get_server('330801853455663107').get_channel('344859521157693440'), timeout=10)
-
-		try:
-			daily = []
-			for word in msg.content.split():
-				word = word.strip('**')
-				word = word.replace(',', '')
-				if word.isdigit():
-					daily.append(word)
-
-			with open('bronze_data.txt', 'a+') as bronze_data:
-				bronze_data.write("{}, ".format(daily[2]))
-		except AttributeError:
-			print('Yui doesn\'t like me...')
-
-		await asyncio.sleep(3600)
 	
 # get mo' money
 async def yui_daily():
 	await client.wait_until_ready()
 	await asyncio.sleep(5)
 	while not client.is_closed:
-		await client.send_message(client.get_server('330801853455663107').get_channel('344859521157693440'), 'yui daily')
+		await client.send_message(client.get_server('330801853455663107').get_channel('344859521157693440'), 't!daily')
 		await asyncio.sleep(43201)
 	
 
@@ -160,9 +136,8 @@ async def on_error(*args):
 							sys.exc_info()[0].__name__)
 						)
 
-#client.loop.create_task(random_game())
-#client.loop.create_task(yui_balance())
-#client.loop.create_task(yui_daily())
+client.loop.create_task(random_game())
+client.loop.create_task(yui_daily())
 client.run(config['token'])
 
 client.send_message(client.get_server('330801853455663107').get_member('283414992752082945'), 'I am going offline.')
