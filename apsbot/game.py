@@ -1,38 +1,46 @@
-from apsbot import base
-from apsbot.base import config
+#from apsbot import base
+#from apsbot.base import config
 
 import asyncio
-
-import sqlite3
-
-conn = sqlite3.connect('rpgdata.cb')
+import json
 
 movements = {
 	'north' : ('y', 1),
-	'up' : ('y', 1),
+	'forwards' : ('y', 1),
 	'south' : ('y', -1),
-	'down' : ('y', -1),
+	'backwards' : ('y', -1),
 	'left' : ('x', -1),
 	'west' : ('x', -1),
 	'right' : ('x', 1),
-	'east' : ('x', 1)
+	'east' : ('x', 1),
 }
 
-def moveplayer((x, y)):
-	conn.execute("SELECT 1 FROM testtable LIMIT 1;")
+playerdata = json.load(open('playerdata.json'))
+mapdata = json.load(open('mapdata.json'))
+
+@base.prefunc
+async def data_exists(client, message):
+	try:
+		aaa = playerdata[message.server.id]
+	except KeyError:
+		playerdata[message.server.id] = {}
+	try:
+		aaa = playerdata[message.server.id][message.author.id]
+	except KeyError:
+		playerdata[message.server.id][message.author.id] = {"health" : 0, "inventory" : {}, "location" : (0, 0, 0)}
+	return True
+
 
 @base.apsfunc
 async def move(client, message):
-	'''**{0}move (direction)**
-	Move your player in your server's
-	instance of the text-rpg game.
-	*Example: '{0}move south'*'''
-	direction = message.content.split()[1]
+	movement = message.lower().strip()[1]
+	playerLoc = playerdata[message.server.id][message.author.id]["location"]
+
 	try:
-		if movements[direction][0] == 'x':
-			move = (movements[direction][1], 0)
-		elif movements[direction][0] == 'y':
-			move = (0, movements[direction][1])
-		
-    	except KeyError:
-      		print("You can't move that way.")
+		if movements[movement][0] == 'x':
+			newLoc = (playerLoc[0] + movements[movement][1], playerLoc[1], playerLoc[2])
+			if mapdata
+		elif movements[movement][0] == 'y':
+
+
+	playerdata[message.server.id][message.author.id]["location"] = ()

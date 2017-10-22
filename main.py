@@ -11,6 +11,8 @@ import discord # obvious.
 # https://github.com/Rapptz/discord.py/tree/async
 
 import apsbot # imports all plugins in the apsbot folder.
+import game # imports rpg code
+
 
 # A sample configs/config.json should be supplied.
 with open('configs/config.json') as data:
@@ -45,15 +47,6 @@ async def random_game():
 		game = discord.Game(name=name)
 		await client.change_presence(game=game, afk=False)
 		await asyncio.sleep(3600)
-	
-# get mo' money
-async def yui_daily():
-	await client.wait_until_ready()
-	await asyncio.sleep(5)
-	while not client.is_closed:
-		await client.send_message(client.get_server('330801853455663107').get_channel('344859521157693440'), 't!daily')
-		await asyncio.sleep(43201)
-	
 
 @client.event
 async def on_message(message):
@@ -137,7 +130,6 @@ async def on_error(*args):
 						)
 
 client.loop.create_task(random_game())
-client.loop.create_task(yui_daily())
 client.run(config['token'])
 
 client.send_message(client.get_server('330801853455663107').get_member('283414992752082945'), 'I am going offline.')
