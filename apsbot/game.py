@@ -39,8 +39,16 @@ async def move(client, message):
 	try:
 		if movements[movement][0] == 'x':
 			newLoc = (playerLoc[0] + movements[movement][1], playerLoc[1], playerLoc[2])
-			if mapdata
 		elif movements[movement][0] == 'y':
+			newLoc = (playerLoc[0], playerLoc[1] + movements[movement][1], playerLoc[2])
+	except KeyError:
+		await client.send_message(message.channel, 'You can\'t move that way')
+		return
 
+	await client.send_message(message.channel, 'You will move {}'.format(movement))
+	playerdata[message.server.id][message.author.id]["location"] = newLoc
+	return
 
-	playerdata[message.server.id][message.author.id]["location"] = ()
+@base.apsfunc
+async def look(client, message):
+	return(xd)
