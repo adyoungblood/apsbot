@@ -2,7 +2,7 @@
 #from apsbot.base import config
 
 import asyncio
-import json
+import sqlite3
 
 movements = {
 	'north' : ('y', 1),
@@ -15,15 +15,17 @@ movements = {
 	'east' : ('x', 1),
 }
 
-playerdata = json.load(open('playerdata.json'))
-mapdata = json.load(open('mapdata.json'))
+gamedata = sqlite3.connect('gamedata.db')
+
+cursor = gamedata.cursor()
 
 @base.prefunc
 async def data_exists(client, message):
 	try:
-		aaa = playerdata[message.server.id]
-	except KeyError:
-		playerdata[message.server.id] = {}
+		cursor.execute("SELECT 1 FROM mapdata LIMIT 1;")
+	except:
+		cursor.execute('''CREATE TABLE mapdata
+			       (x, y, z, description)''')
 	try:
 		aaa = playerdata[message.server.id][message.author.id]
 	except KeyError:
