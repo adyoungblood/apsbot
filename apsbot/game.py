@@ -25,13 +25,13 @@ async def data_exists(client, message):
 		cursor.execute("SELECT 1 FROM mapdata LIMIT 1;")
 	except:
 		cursor.execute('''CREATE TABLE mapdata
-			       (x, y, z, description)''')
+			       (x real, y real, z real, description text)''')
 	try:
-		aaa = playerdata[message.server.id][message.author.id]
-	except KeyError:
-		playerdata[message.server.id][message.author.id] = {"health" : 0, "inventory" : {}, "location" : (0, 0, 0)}
-	return True
-
+		cursor.execute("SELECT 1 FROM playerdata LIMIT 1;")
+	except:
+		cursor.execute('''CREATE TABLE playerdata
+			       (x real, y real, z real, health real)''')
+	
 
 @base.apsfunc
 async def move(client, message):
