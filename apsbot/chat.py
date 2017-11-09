@@ -196,6 +196,6 @@ async def jewemote(client, message):
 	emojis = client.server.emojis
 	await client.send_message(message.channel, """{}{}{}
 {}{}{}
-{}{}{}""".format(emojis[10], emojis[11], emojis[12], emojis[13], emojis[14], emojis[15], emojis[16], emojis[17], emojis[18])
+{}{}{}""".format(emojis[10], emojis[11], emojis[12], emojis[13], emojis[14], emojis[15], emojis[16], emojis[17], emojis[18]))
 
 		
