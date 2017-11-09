@@ -11,7 +11,6 @@ import discord # obvious.
 # https://github.com/Rapptz/discord.py/tree/async
 
 import apsbot # imports all plugins in the apsbot folder.
-import game # imports rpg code
 
 
 # A sample configs/config.json should be supplied.
