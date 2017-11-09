@@ -193,7 +193,7 @@ async def off(client, message):
 @base.apsfunc
 async def jewemote(client, message):
 	'''Sends the large version of the jew emote. Only works in the server of the creator.'''
-	emojis = client.server.emojis
+	emojis = message.server.emojis
 	await client.send_message(message.channel, """{}{}{}
 {}{}{}
 {}{}{}""".format(emojis[10], emojis[11], emojis[12], emojis[13], emojis[14], emojis[15], emojis[16], emojis[17], emojis[18]))
