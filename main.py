@@ -38,15 +38,13 @@ async def on_ready():
 	await client.change_presence(game=discord.Game(name='hyperlul'), afk=False)
 
 # random game status
-async def random_game():
-	''' Changes the game in the bot's status. '''
+async def hey_guys_desinc_here():
+	''' I really want level 50 ok. '''
 	await client.wait_until_ready()
 	while not client.is_closed:
-		name = choice(config['games'])
-		game = discord.Game(name=name)
-		await client.change_presence(game=game, afk=False)
-		await asyncio.sleep(3600)
-
+		client.send_message(client.get_server('364220567190241280').get_channel('364220567689232384'), ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(N)))
+		asyncio.sleep(random.randint(65, 120))
+		
 @client.event
 async def on_message(message):
 	'''
